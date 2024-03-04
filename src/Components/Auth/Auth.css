@@ -1,0 +1,85 @@
+/* Auth.css */
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f1f1f1;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  
+}
+
+.container {
+  background: linear-gradient(
+    to bottom right,
+    rgb(16, 8, 126),
+    rgb(184, 16, 142)
+  );
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+  max-width: 400px;
+  height: 70vh;
+  color: white;
+  padding-bottom: 25px;
+}
+
+.auth-box {
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  font-size: 30px;
+}
+
+form {
+  /* display: flex;
+    flex-direction: column; */
+  line-height: 2em;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+label {
+  /* font-weight: bold; */
+  margin-bottom: 5px;
+}
+
+input {
+  width: 90%;
+  margin: auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+  color: black;
+}
+
+.Auth-btn {
+  padding: 10px 30px;
+  background-color: #052785;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    box-shadow: none;
+    width: 100%;
+  }
+}
