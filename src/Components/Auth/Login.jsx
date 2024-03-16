@@ -77,7 +77,7 @@ function LoginPage() {
           </button>
           <p>
             {" "}
-            No account yet? SignUp <Link to="/SignUp">here</Link>
+            No account yet? SignUp <Link to="/">here</Link>
           </p>
         </form>
       </div>
