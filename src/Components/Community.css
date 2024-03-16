@@ -1,5 +1,186 @@
-
 .community {
+  width: 100vw; /* Full width of the viewport */
+  /* height: 100vh; Full height of the viewport */
+  padding: 10px;
+  background: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  position: relative;
+  /* overflow: auto; Add scroll bar when content overflows */
+}
+
+.community-body {
+  width: 60%;
+  margin: auto;
+  /* margin: 30px auto 0; */
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  padding: 20px;
+  padding-bottom: 5px;
+  overflow: hidden; /* Hide overflow initially */
+}
+
+.post-box {
+  margin: auto; /* Center the post box */
+  padding: 10px;
+  border-bottom: 1px solid #b8b6b6;
+  background-color: #aca8a8;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1), 1px 5px 2px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; /* Add space between post-box divs */
+}
+
+.post-content-box {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 15px 15px 0px 15px;
+}
+textarea {
+  background: transparent;
+}
+
+.textarea-btns button {
+  padding: 0px 15px;
+  height: 30px;
+  background: #033d6d;
+  color: #ffffff;
+  border-radius: 5px;
+}
+
+.textarea-btns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.media-icon {
+  margin-left: 15em;
+}
+
+.search-icon {
+  margin-bottom: 30px;
+}
+.search-icon input {
+  border: none;
+  border-bottom: 1px solid #acacad;
+}
+
+.search-icon input:focus {
+  outline: none;
+}
+/* .post-list.show-scrollbar {
+    overflow-y: auto;
+} */
+
+.chat-inputarea {
+  display: flex;
+  padding: 5px;
+  background: #acacad;
+  color: black;
+  border-radius: 10px;
+  margin-block-start: 20px;
+  margin-bottom: 60px;
+}
+
+.post-image-content {
+  width: 100%;
+  height: 100%;
+  margin-top: 25px;
+}
+
+.message-form {
+  display: flex;
+}
+
+.msg {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.msg-img {
+  width: 30px;
+  height: 30px;
+  margin-right: 15px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+
+.msg-bubble {
+  /* max-width: 350px; */
+  /* border-radius: 15px; */
+  margin: 15px;
+}
+
+.msg-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.msg-info-name {
+  margin-right: 70px;
+  margin-bottom: 15px;
+  margin-left: 5px;
+  font-size: 14px;
+}
+
+.msg-info-time {
+  font-size: 0.8em;
+  text-align: right;
+}
+
+.chat-inputarea * {
+  padding: 5px;
+  border: none;
+  /* border-radius: 3px; */
+  font-size: 1em;
+}
+
+button.like-button {
+  background: none;
+  border: 0;
+  margin: 25px 0 0;
+}
+
+button.comment-btn {
+  background: none;
+  border: 0;
+  margin-left: 5px;
+}
+
+.Send-comment {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background: #a2a2a3;
+}
+
+.heart-icon {
+  margin-left: 10px;
+  margin-bottom: 0;
+}
+
+.comment-icon {
+  margin: 25px 70px 0;
+}
+
+.see-more-btn {
+  width: 100px;
+  margin: auto;
+  background: blue;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  display: inline-block;
+  border: none;
+}
+
+@media screen and (max-width: 768px) {
+  .community {
     width: 100%;
     max-width: 450px;
     height: 100vh; /* Limit height of community div */
@@ -10,112 +191,167 @@
     background: #ffffff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
     position: relative;
-    overflow: auto; /* Add scroll bar when content overflows */
-}
+    /* overflow: hidden; */
+    /* overflow: auto; Add scroll bar when content overflows */
+  }
 
-.header-arc {
-  position: absolute;
-  width: 100%;
-  height: 400px;
-  border-radius: 30%;
-  background: #04288a;
-  top: -240px; /* Adjusted to hide top part */
-  left: 50%; /* Centers it horizontally */
-  transform: translateX(-50%); /* Centers it horizontally */
-  
-}
-
-.community-body{
-   /* left: 50%;
+  .community-body {
+    /* left: 50%;
    top: 50%; */
     width: 90%;
-    margin:130px 0px 0px 0px;
+    margin: 30px 0px 0px 0px;
     display: flex;
     flex-direction: column;
     align-items: left;
     padding: 20px;
     padding-bottom: 5px;
-    overflow: hidden; /* Hide overflow initially */
- 
-}
-.post-box {
+    /* overflow: hidden; Hide overflow initially */
+  }
+  .post-box {
     padding: 10px;
-    border-radius: 15px;
+    border-radius: 5px;
     background-color: #aca8a8; /* Set the background color */
-    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2), 1px 5px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1), 1px 5px 2px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px; /* Add space between post-box divs */
-}
-.post-list.show-scrollbar {
-    overflow-y: auto; /* Show scrollbar when "See More" is clicked */
-}
-.chat-inputarea{
-    display: flex;
-    padding: 10px;
-    background: #819eee;
-    border-radius: 10px;
-    margin-block-start: 20px;
-    justify-content: space-between;
-    margin-bottom: 80px;
-  }
-  
-
-.message-form{
-    display: flex;
-}
-
-.msg{
-    display: flex;
-    /* align-items: flex-end; */
-    margin-bottom: 10px;
-   }
-   
-   /* .msg:last-of-type{
-       margin: 0;
-   } */
-   
-   
-   .msg-img{
-       width: 30px;
-       height: 30px;
-       margin-right: 15px;
-       background-repeat: no-repeat;
-       background-size: cover;
-       background-position:center;
-       border-radius: 50%;
-   }
-   .msg-bubble{
-       max-width: 350px;
-       /* padding: 5px; */
-       border-radius: 15px;
-       
-   }
-   .msg-info{
-       display: flex;
-       justify-content: space-between;
-       align-items: center;
-   }
-   .msg-info-name{
-       margin-right: 75px;
-       font-weight: bold;
-   }
-   .msg-info-time{
-       font-size: 0.8em;
-       text-align: right;
-   }
-  
-  .chat-inputarea *{
-      padding: 5px;
-      border: none;
-      border-radius: 3px;
-      font-size: 1em;
   }
 
- textarea{
+  .post-content-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  textarea {
     /* width: 100%;
     max-width: 350px; */
     flex: 1;
-    background:transparent;
+    background: transparent;
     outline: none;
-    border: 1px solid rgba(255, 255, 255, 0.7);
-}
+    border: 1px solid rgba(248, 248, 248, 0.856);
+  }
+  .textarea-btns {
+    display: flex;
+    text-align: center;
+    margin-bottom: -13px;
+  }
+  .textarea-btns button {
+    padding: 0px 15px;
+    height: 30px;
+    background: #080599;
+    color: #ffffff;
+  }
 
+  .textarea-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .media-icon {
+    margin-left: 15em;
+  }
+
+  .post-image-content {
+    width: 100%;
+    height: 100%;
+    margin-top: 25px;
+  }
+
+  /* .post-list.show-scrollbar {
+    overflow-y: auto;  Show scrollbar when "See More" is clicked 
+}*/
+  .chat-inputarea {
+    display: flex;
+    padding: 5px;
+    background: #acacad;
+    color: black;
+    border-radius: 10px;
+    margin-block-start: 20px;
+    /* justify-content: space-between; */
+    margin-bottom: 80px;
+  }
+
+  .message-form {
+    display: flex;
+  }
+
+  .msg {
+    display: flex;
+    /* align-items: flex-end; */
+    margin-bottom: 10px;
+  }
+
+  .msg-img {
+    width: 30px;
+    height: 30px;
+    margin-right: 15px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+  }
+  .msg-bubble {
+    max-width: 350px;
+    /* padding: 5px; */
+    border-radius: 15px;
+  }
+  .msg-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .msg-info-name {
+    margin-right: 70px;
+    margin-bottom: 15px;
+    margin-left: 5px;
+    /* font-weight: bold; */
+    font-size: 14px;
+  }
+  .msg-info-time {
+    font-size: 0.8em;
+    text-align: right;
+  }
+
+  .chat-inputarea * {
+    padding: 5px;
+    border: none;
+    border-radius: 3px;
+    font-size: 1em;
+  }
+
+  button.like-button {
+    background: none;
+    border: 0;
+    margin: 25px 0px 0;
+  }
+  button.comment-btn {
+    background: none;
+    border: 0;
+    margin-left: 5px;
+  }
+  .Send-comment {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background: #a2a2a3;
+  }
+  .heart-icon {
+    margin-left: 10px;
+    margin-bottom: 0px;
+  }
+
+  .comment-icon {
+    margin: 25px 20px 0;
+  }
+
+  .see-more-btn {
+    width: 100px;
+    margin: auto;
+    background: rgb(6, 51, 88);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    display: inline-block;
+    border: none;
+  }
+}

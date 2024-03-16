@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { auth, GoogleProvider } from "../../Firebase";
+import { auth, GoogleProvider } from "../Firebase_config/Firebase";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { Link } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
-import './Auth.css';
+import { useNavigate } from "react-router-dom";
+import "./Auth.css";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -20,7 +20,7 @@ function LoginPage() {
       );
       console.log(userCredential);
       alert("Login successful");
-      navigate('/CommunityForum');
+      navigate("/CommunityForum");
     } catch (e) {
       alert("Error Signing in");
       console.log(e);
@@ -32,7 +32,7 @@ function LoginPage() {
       const result = await signInWithPopup(auth, GoogleProvider);
       console.log(result);
       alert("Google Login successful");
-      navigate('/CommunityForum');
+      navigate("/CommunityForum");
     } catch (error) {
       alert("Error Signing in with Google");
       console.error(error);
@@ -65,8 +65,16 @@ function LoginPage() {
               placeholder="Enter your Password"
             />
           </div>
-          <button className="Auth-btn" type="submit">Login</button>
-          <button className="Auth-btn" type="button" onClick={handleGoogleLogin}>Login with Google</button>
+          <button className="Auth-btn" type="submit">
+            Login
+          </button>
+          <button
+            className="Auth-btn"
+            type="button"
+            onClick={handleGoogleLogin}
+          >
+            Login with Google
+          </button>
           <p>
             {" "}
             No account yet? SignUp <Link to="/SignUp">here</Link>

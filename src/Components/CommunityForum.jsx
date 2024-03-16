@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { auth, firestore } from "../Firebase"; // Import Firebase setup
 import {
   collection,
   getDocs,
@@ -7,19 +6,29 @@ import {
   updateDoc,
   doc,
 } from "firebase/firestore";
+import { imgDB } from "./Firebase_config/Firebase";
+import { auth, firestore } from "./Firebase_config/Firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { onAuthStateChanged } from "firebase/auth";
+import { formatDistanceToNow } from "date-fns";
 import "./Community.css";
+import { BiImageAdd } from "react-icons/bi";
+import { GoHeartFill, GoCommentDiscussion } from "react-icons/go";
+import { CiSearch } from "react-icons/ci";
 
 function CommunityForum() {
   const [newPost, setNewPost] = useState("");
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
-  const [displayedPosts, setDisplayedPosts] = useState(3); // Number of posts to display initially
-  const [showMore, setShowMore] = useState(false); // Track whether "See More" button is clicked
+  const [displayedPosts, setDisplayedPosts] = useState(3);
+  const [showMore, setShowMore] = useState(false);
   const [commentText, setCommentText] = useState("");
-  const [selectedPost, setSelectedPost] = useState(null); // Track selected post for adding comments
-  const [commentInputVisible, setCommentInputVisible] = useState(false); // Track visibility of comment input field
-  const [showComments, setShowComments] = useState({}); // Track visibility of comments for each post
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [commentInputVisible, setCommentInputVisible] = useState(false);
+  const [showComments, setShowComments] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -38,10 +47,10 @@ function CommunityForum() {
     try {
       const querySnapshot = await getDocs(collection(firestore, "posts"));
       const postsData = [];
-      for (const docRef of querySnapshot.docs) {
+      querySnapshot.forEach((docRef) => {
         const postData = docRef.data();
         postsData.push({ id: docRef.id, ...postData, liked: false });
-      }
+      });
       setPosts(postsData);
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -52,20 +61,36 @@ function CommunityForum() {
     setNewPost(e.target.value);
   };
 
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      const selectedImage = e.target.files[0];
+      setImage(selectedImage);
+      const imageUrl = URL.createObjectURL(selectedImage);
+      setImageUrl(imageUrl);
+    }
+  };
+
   const handlePostSubmit = async (e) => {
     e.preventDefault();
-    if (newPost.trim() !== "" && user) {
+    if ((newPost.trim() !== "" || image) && user) {
       try {
-        // Save the new post to Firestore
+        let imageUrl = "";
+        if (image) {
+          const storageRef = ref(imgDB, `images/${image.name}`);
+          await uploadBytes(storageRef, image);
+          imageUrl = await getDownloadURL(storageRef);
+        }
         await addDoc(collection(firestore, "posts"), {
           content: newPost,
           createdAt: new Date(),
           userEmail: user.email,
-          comments: [], // Initialize comments array
-          likes: 0, // Initialize likes count
+          comments: [],
+          likes: 0,
+          imageUrl: imageUrl,
         });
         setNewPost("");
-        // After posting, fetch posts again to include the latest one
+        setImage(null);
+        setImageUrl("");
         fetchPosts();
       } catch (error) {
         console.error("Error posting:", error);
@@ -78,15 +103,13 @@ function CommunityForum() {
       try {
         const updatedComments = [
           ...selectedPost.comments,
-          { text: commentText, user: user.email },
+          { user: user.email, text: commentText },
         ];
         await updateDoc(doc(firestore, "posts", selectedPost.id), {
           comments: updatedComments,
         });
-        // After commenting, fetch posts again to include the updated one
         fetchPosts();
         setCommentText("");
-        setCommentInputVisible(false);
       } catch (error) {
         console.error("Error adding comment:", error);
       }
@@ -102,13 +125,21 @@ function CommunityForum() {
         await updateDoc(doc(firestore, "posts", postId), {
           likes: post.likes + 1,
         });
-        updatedPosts[postIndex] = { ...post, liked: true, likes: post.likes + 1 };
+        updatedPosts[postIndex] = {
+          ...post,
+          liked: true,
+          likes: post.likes + 1,
+        };
         setPosts(updatedPosts);
       } else {
         await updateDoc(doc(firestore, "posts", postId), {
           likes: post.likes - 1,
         });
-        updatedPosts[postIndex] = { ...post, liked: false, likes: post.likes - 1 };
+        updatedPosts[postIndex] = {
+          ...post,
+          liked: false,
+          likes: post.likes - 1,
+        };
         setPosts(updatedPosts);
       }
     } catch (error) {
@@ -116,15 +147,12 @@ function CommunityForum() {
     }
   };
 
-  const handleSeeComments = (postId) => {
+  const handleToggleCommentInput = (postId) => {
     const updatedShowComments = {
       ...showComments,
       [postId]: !showComments[postId],
     };
     setShowComments(updatedShowComments);
-  };
-
-  const handleToggleCommentInput = (postId) => {
     setSelectedPost(posts.find((post) => post.id === postId));
     setCommentInputVisible(true);
   };
@@ -134,36 +162,93 @@ function CommunityForum() {
     setShowMore(true);
   };
 
+  const formatPostTime = (createdAt) => {
+    return formatDistanceToNow(new Date(createdAt), { addSuffix: true });
+  };
+
+  const handleContinueReading = (postId) => {
+    const updatedPosts = posts.map((post) => {
+      if (post.id === postId) {
+        return { ...post, showFullContent: true };
+      }
+      return post;
+    });
+    setPosts(updatedPosts);
+  };
+
+  const filteredPosts = posts.filter((post) =>
+    post.content.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="community">
-      <div className="header-arc"></div>
       <div className="community-body">
+        <h3>Community</h3>
         {user && (
           <div>
             <form
               className="chat-inputarea message-form"
               onSubmit={handlePostSubmit}
             >
-              <textarea
-                value={newPost}
-                onChange={handlePostChange}
-                placeholder="Share something with the community..."
-                rows={2}
-              />
-              <button type="submit">Post</button>
+              <div className="post-content-box">
+                <textarea
+                  value={newPost}
+                  onChange={handlePostChange}
+                  placeholder="Share something with the community..."
+                  rows={5}
+                  style={{
+                    resize: "none",
+                    width: "100%",
+                    boxSizing: "border-box",
+                  }}
+                />
+
+                {imageUrl && (
+                  <img
+                    src={imageUrl}
+                    alt="Selected"
+                    style={{ width: "100px", height: "100px" }}
+                  />
+                )}
+
+                <div className="textarea-btns">
+                  <button type="submit">Post</button>
+
+                  <label htmlFor="file-upload">
+                    <BiImageAdd style={{ cursor: "pointer" }} />
+                    <input
+                      type="file"
+                      onChange={handleImageChange}
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      id="file-upload"
+                    />
+                  </label>
+                </div>
+              </div>
             </form>
+
+            <div className="search-icon">
+              <CiSearch />
+              <input
+                type="text"
+                placeholder="Search posts..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
           </div>
         )}
         <div className={`post-list ${showMore ? "show-scrollbar" : ""}`}>
-          {posts.slice(0, displayedPosts).map((post, index) => (
+          {filteredPosts.slice(0, displayedPosts).map((post, index) => (
             <div
               key={index}
               className="post-box"
               style={{
                 padding: "10px",
-                borderRadius: "15px",
                 background: "#fff",
                 boxShadow: "rgba(0, 0, 0, 0.1)",
+                cursor: "pointer",
               }}
             >
               <div className="msg-bubble">
@@ -172,55 +257,79 @@ function CommunityForum() {
                     <strong>{post.userEmail}</strong>{" "}
                   </div>
                   <div className="msg-info-time">
-                    {post.createdAt.toDate().toLocaleString()}
+                    {formatPostTime(post.createdAt.toDate())}
                   </div>
                 </div>
-                <div className="msg-text">{post.content}</div>
+
+                <div className="msg-text">
+                  {post.showFullContent ? post.content : post.content.slice(0, 90)}
+                  {post.content.length > 50 && !post.showFullContent && (
+                    <>
+                      {" ... "}
+                      <span
+                        style={{ fontSize: "12px", cursor: "pointer",color: "blue" }}
+                        onClick={() => handleContinueReading(post.id)}
+                      >
+                        Continue Reading
+                      </span>
+                    </>
+                  )}
+                </div>
+                {post.imageUrl && <img className="post-image-content" src={post.imageUrl} alt="Uploaded" />}
                 <div>
                   <button
-                    style={{
-                      backgroundColor: post.liked ? "blue" : "white",
-                      color: post.liked ? "white" : "black",
-                    }}
+                    className="like-button"
                     onClick={() => handleLikePost(post.id)}
                   >
-                    Like 
-                    <span> {post.likes}</span>
+                    <i
+                      className="heart-icon"
+                      style={{
+                        color: post.liked ? "red" : "black",
+                      }}
+                    >
+                      <GoHeartFill />{" "}
+                    </i>
+                    <span> Love ({post.likes})</span>
                   </button>
-
-                  <button onClick={() => handleToggleCommentInput(post.id)}>
-                    Comment
-                  </button>
-
-                  <button onClick={() => handleSeeComments(post.id)}>
-                    {showComments[post.id] ? "Hide Comments" : "See Comments"}
-                  </button>
-                  {commentInputVisible &&
+                  <i className="comment-icon">
+                    <GoCommentDiscussion />
+                    <button
+                      className="comment-btn"
+                      onClick={() => handleToggleCommentInput(post.id)}
+                    >
+                      Comment ({post.comments.length})
+                    </button>
+                  </i>
+                  {showComments[post.id] &&
                     selectedPost &&
                     selectedPost.id === post.id && (
                       <div>
+                        {selectedPost.comments && (
+                          <ol>
+                            {selectedPost.comments.map((comment, index) => (
+                              <li key={index}>
+                                <b>{comment.user}:</b> <br></br>
+                                {comment.text}
+                              </li>
+                            ))}
+                          </ol>
+                        )}
                         <input
                           type="text"
                           value={commentText}
                           onChange={(e) => setCommentText(e.target.value)}
                           placeholder="Type your comment"
+                          style={{
+                            fontSize: "13px",
+                          }}
                         />
-                        <button onClick={handleCommentSubmit}>
-                          Submit Comment
+                        <button
+                          className="Send-comment"
+                          onClick={handleCommentSubmit}
+                        >
+                          Send Comment
                         </button>
                       </div>
-                    )}
-                  {showComments[post.id] &&
-                    selectedPost &&
-                    selectedPost.id === post.id &&
-                    selectedPost.comments && (
-                      <ol>
-                        {selectedPost.comments.map((comment, index) => (
-                          <li key={index}>
-                            {comment.user}: {comment.text}
-                          </li>
-                        ))}
-                      </ol>
                     )}
                 </div>
               </div>
@@ -228,7 +337,9 @@ function CommunityForum() {
           ))}
         </div>
         {posts.length > displayedPosts && (
-          <button onClick={handleSeeMore}>See More</button>
+          <button className="see-more-btn" onClick={handleSeeMore}>
+            See More
+          </button>
         )}
       </div>
     </div>

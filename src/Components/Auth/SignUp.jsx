@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { auth, firestore } from "../../Firebase"; // Assuming db is your Firestore instance
+import { auth, firestore } from "../Firebase_config/Firebase"; // Assuming db is your Firestore instance
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore"; // Import Firestore functions
 import { Link } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
-import './Auth.css';
+import { useNavigate } from "react-router-dom";
+import "./Auth.css";
 
 function SignUpPage() {
   const [username, setUsername] = useState("");
@@ -25,14 +25,14 @@ function SignUpPage() {
       // Add user information to Firestore
       await addDoc(collection(firestore, "users"), {
         username: username,
-        email: email
+        email: email,
       });
 
       // // Save username in local storage
       // localStorage.setItem('username', username);
 
       alert("User Account created");
-      navigate('/Login');
+      navigate("/Login");
       console.log(userCredential);
     } catch (error) {
       alert("Error in creating Account");
@@ -78,7 +78,9 @@ function SignUpPage() {
             />
           </div>
 
-          <button className="Auth-btn" type="submit">Sign-Up</button>
+          <button className="Auth-btn" type="submit">
+            Sign-Up
+          </button>
           <p>
             Already have an account? Login <Link to="/Login">here</Link>
           </p>
