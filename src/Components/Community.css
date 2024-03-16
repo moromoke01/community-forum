@@ -180,9 +180,7 @@ button.comment-btn {
 }
 
 @media screen and (max-width: 768px) {
-    *{
-        box-sizing: border-box;
-    }
+    
   .community {
     width: 100%;
     max-width: 450px;
@@ -194,7 +192,7 @@ button.comment-btn {
     background: #ffffff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
     position: relative;
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
     /* overflow: auto; Add scroll bar when content overflows */
   }
 
@@ -208,7 +206,7 @@ button.comment-btn {
     align-items: left;
     padding: 20px;
     padding-bottom: 5px;
-    overflow: hidden; /*Hide overflow initially */
+    /* overflow: hidden; Hide overflow initially */
   }
   .post-box {
     padding: 10px;
