@@ -11,10 +11,10 @@ import { auth, firestore } from "./Firebase_config/Firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { onAuthStateChanged } from "firebase/auth";
 import { formatDistanceToNow } from "date-fns";
+import "./Community.css";
 import { BiImageAdd } from "react-icons/bi";
 import { GoHeartFill, GoCommentDiscussion } from "react-icons/go";
 import { CiSearch } from "react-icons/ci";
-import "./tailwindcss"
 
 function CommunityForum() {
   const [newPost, setNewPost] = useState("");
@@ -181,41 +181,46 @@ function CommunityForum() {
   );
 
   return (
-    <div className="community bg-white p-10 shadow-md relative">
-      <div className="community-body w-60vw mx-auto flex flex-col items-left pb-5 overflow-hidden">
+    <div className="community">
+      <div className="community-body">
         <h3>Community</h3>
         {user && (
           <div>
-            <form className="chat-inputarea message-form" onSubmit={handlePostSubmit}>
+            <form
+              className="chat-inputarea message-form"
+              onSubmit={handlePostSubmit}
+            >
               <div className="post-content-box">
                 <textarea
                   value={newPost}
                   onChange={handlePostChange}
                   placeholder="Share something with the community..."
                   rows={5}
-                  className="w-full resize-none bg-transparent"
+                  style={{
+                    resize: "none",
+                    width: "100%",
+                    boxSizing: "border-box",
+                  }}
                 />
 
                 {imageUrl && (
                   <img
                     src={imageUrl}
                     alt="Selected"
-                    className="w-100 h-100"
+                    style={{ width: "100px", height: "100px" }}
                   />
                 )}
 
-                <div className="textarea-btns flex justify-between">
-                  <button type="submit" className="px-5 py-1 bg-blue-500 text-white rounded">
-                    Post
-                  </button>
+                <div className="textarea-btns">
+                  <button type="submit">Post</button>
 
                   <label htmlFor="file-upload">
-                    <BiImageAdd className="cursor-pointer" />
+                    <BiImageAdd style={{ cursor: "pointer" }} />
                     <input
                       type="file"
                       onChange={handleImageChange}
                       accept="image/*"
-                      className="hidden"
+                      style={{ display: "none" }}
                       id="file-upload"
                     />
                   </label>
@@ -223,28 +228,33 @@ function CommunityForum() {
               </div>
             </form>
 
-            <div className="search-icon flex items-center mb-3">
+            <div className="search-icon">
               <CiSearch />
               <input
                 type="text"
                 placeholder="Search posts..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="ml-2 border-b border-gray-400 focus:outline-none"
               />
             </div>
           </div>
         )}
-        <div className={`post-list ${showMore ? "overflow-y-auto" : ""}`}>
+        <div className={`post-list ${showMore ? "show-scrollbar" : ""}`}>
           {filteredPosts.slice(0, displayedPosts).map((post, index) => (
             <div
               key={index}
-              className="post-box p-10 mb-20 bg-gray-300 shadow-md cursor-pointer"
+              className="post-box"
+              style={{
+                padding: "10px",
+                background: "#fff",
+                boxShadow: "rgba(0, 0, 0, 0.1)",
+                cursor: "pointer",
+              }}
             >
               <div className="msg-bubble">
-                <div className="msg-info flex justify-between items-center">
+                <div className="msg-info">
                   <div className="msg-info-name">
-                    <strong>{post.userEmail}</strong>
+                    <strong>{post.userEmail}</strong>{" "}
                   </div>
                   <div className="msg-info-time">
                     {formatPostTime(post.createdAt.toDate())}
@@ -257,7 +267,7 @@ function CommunityForum() {
                     <>
                       {" ... "}
                       <span
-                        className="text-blue-500 cursor-pointer"
+                        style={{ fontSize: "12px", cursor: "pointer",color: "blue" }}
                         onClick={() => handleContinueReading(post.id)}
                       >
                         Continue Reading
@@ -265,7 +275,7 @@ function CommunityForum() {
                     </>
                   )}
                 </div>
-                {post.imageUrl && <img className="post-image-content w-full" src={post.imageUrl} alt="Uploaded" />}
+                {post.imageUrl && <img className="post-image-content" src={post.imageUrl} alt="Uploaded" />}
                 <div>
                   <button
                     className="like-button"
@@ -309,10 +319,12 @@ function CommunityForum() {
                           value={commentText}
                           onChange={(e) => setCommentText(e.target.value)}
                           placeholder="Type your comment"
-                          className="text-sm"
+                          style={{
+                            fontSize: "13px",
+                          }}
                         />
                         <button
-                          className="Send-comment bg-gray-600 text-white px-3 py-1 rounded"
+                          className="Send-comment"
                           onClick={handleCommentSubmit}
                         >
                           Send Comment
@@ -325,10 +337,7 @@ function CommunityForum() {
           ))}
         </div>
         {posts.length > displayedPosts && (
-          <button
-            className="see-more-btn bg-blue-500 text-white py-2 px-4 rounded"
-            onClick={handleSeeMore}
-          >
+          <button className="see-more-btn" onClick={handleSeeMore}>
             See More
           </button>
         )}

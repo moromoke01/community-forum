@@ -1,7 +1,7 @@
 import './App.css';
 import LoginPage from './Components/Auth/Login';
 import SignUpPage from './Components/Auth/SignUp';
-import CommunityForum from './Components/CommunityForum';
+import CommunityForum from './Components/CommunityForum1';
 import PostDetails from './Components/PostDetails';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 
