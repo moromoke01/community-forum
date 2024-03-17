@@ -14,7 +14,8 @@ import { formatDistanceToNow } from "date-fns";
 import { BiImageAdd } from "react-icons/bi";
 import { GoHeartFill, GoCommentDiscussion } from "react-icons/go";
 import { CiSearch } from "react-icons/ci";
-import "./tailwindcss"
+import { BsFillPersonFill } from "react-icons/bs";
+import "./tailwindcss";
 
 function CommunityForum() {
   const [newPost, setNewPost] = useState("");
@@ -49,7 +50,13 @@ function CommunityForum() {
       const postsData = [];
       querySnapshot.forEach((docRef) => {
         const postData = docRef.data();
-        postsData.push({ id: docRef.id, ...postData, liked: false });
+        const post = { id: docRef.id, ...postData, liked: false };
+        // Check if the post's userEmail matches the current user's email
+        // and if avatarUrl is available
+        if (user && post.userEmail === user.email && user.photoURL) {
+          post.avatarUrl = user.photoURL;
+        }
+        postsData.push(post);
       });
       setPosts(postsData);
     } catch (error) {
@@ -186,7 +193,10 @@ function CommunityForum() {
         <h3>Community</h3>
         {user && (
           <div>
-            <form className="chat-inputarea message-form" onSubmit={handlePostSubmit}>
+            <form
+              className="chat-inputarea message-form"
+              onSubmit={handlePostSubmit}
+            >
               <div className="post-content-box">
                 <textarea
                   value={newPost}
@@ -197,15 +207,14 @@ function CommunityForum() {
                 />
 
                 {imageUrl && (
-                  <img
-                    src={imageUrl}
-                    alt="Selected"
-                    className="w-100 h-100"
-                  />
+                  <img src={imageUrl} alt="Selected" className="w-100 h-100" />
                 )}
 
                 <div className="textarea-btns flex justify-between">
-                  <button type="submit" className="px-5 py-1 bg-blue-500 text-white rounded">
+                  <button
+                    type="submit"
+                    className="px-5 py-1 bg-blue-500 text-white rounded"
+                  >
                     Post
                   </button>
 
@@ -244,6 +253,17 @@ function CommunityForum() {
               <div className="msg-bubble">
                 <div className="msg-info flex justify-between items-center">
                   <div className="msg-info-name">
+                    {post.avatarUrl ? (
+                      <img
+                        src={post.avatarUrl}
+                        alt="Avatar"
+                        className="w-8 h-8 rounded-full mr-2"
+                      />
+                    ) : (
+                      <i>
+                        <BsFillPersonFill />
+                      </i>
+                    )}
                     <strong>{post.userEmail}</strong>
                   </div>
                   <div className="msg-info-time">
@@ -252,7 +272,9 @@ function CommunityForum() {
                 </div>
 
                 <div className="msg-text">
-                  {post.showFullContent ? post.content : post.content.slice(0, 90)}
+                  {post.showFullContent
+                    ? post.content
+                    : post.content.slice(0, 90)}
                   {post.content.length > 50 && !post.showFullContent && (
                     <>
                       {" ... "}
@@ -265,7 +287,13 @@ function CommunityForum() {
                     </>
                   )}
                 </div>
-                {post.imageUrl && <img className="post-image-content w-full" src={post.imageUrl} alt="Uploaded" />}
+                {post.imageUrl && (
+                  <img
+                    className="post-image-content w-full"
+                    src={post.imageUrl}
+                    alt="Uploaded"
+                  />
+                )}
                 <div>
                   <button
                     className="like-button"
@@ -298,7 +326,7 @@ function CommunityForum() {
                           <ol>
                             {selectedPost.comments.map((comment, index) => (
                               <li key={index}>
-                                <b>{comment.user}:</b> <br></br>
+                                <b>{comment.user}:</b> <br />
                                 {comment.text}
                               </li>
                             ))}
