@@ -15,6 +15,8 @@ import "./Community.css";
 import { BiImageAdd } from "react-icons/bi";
 import { GoHeartFill, GoCommentDiscussion } from "react-icons/go";
 import { CiSearch } from "react-icons/ci";
+// import Avatar from "./Avatar"; // Import the Avatar component
+// import md5 from "md5";
 
 function CommunityForum() {
   const [newPost, setNewPost] = useState("");

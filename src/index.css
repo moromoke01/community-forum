@@ -1,15 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-
+.community{
+ width: 100%;
+ min-width: 100%;
+}
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Roboto', sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.post-box {
+  margin: auto; /* Center the post box */
+  padding: 10px;
+  /* border-bottom: 1px solid #b8b6b6;
+  background-color: #aca8a8; */
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1), 1px 5px 2px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; /* Add space between post-box divs */
+}
+
+textarea {
+  background: transparent;
+  color:black;
+}
+
+.textarea-btns button {
+  padding: 0px 15px;
+  height: 30px;
+  color: #ffffff;
+}
+.post-content-box {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 15px 15px 0px 15px;
+}
+.chat-inputarea {
+  display: flex;
+  padding: 5px;
+  background: #dcdcdf;
+  color: black;
+  border-radius: 10px;
+  margin-block-start: 20px;
+  margin-bottom: 60px;
+  padding-bottom: 20px;
+}
+
+.community-body {
+  width: 100%;
+  margin: auto;
+  /* margin: 30px auto 0; */
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  padding: 20px;
+  padding-bottom: 5px;
+  overflow: hidden; /* Hide overflow initially */
+}
+
+.search{
+  border-bottom:1px solid #bbbaba;
+  min-width: 100%;
+}
+
+.search-icon {
+  margin-bottom: 30px;
+  min-width: 100%;
+}
+.post-box{
+  margin-top: 25px;
+}
+.post-reaction-btn{
+  display: flex;
+  gap: 100px;
+  margin-top: 20px;
+}
+
+.post-reaction-btn:hover {
+  background-color: none; /* or default color */
 }

@@ -71,7 +71,7 @@ function LoginPage() {
           <button
             className="Auth-btn"
             type="button"
-            onClick={handleGoogleLogin}
+            onClick={handleGoogleLogin} // Added onClick event for Google login
           >
             Login with Google
           </button>
